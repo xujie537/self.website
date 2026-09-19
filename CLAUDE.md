@@ -53,6 +53,7 @@ Claude 应主动发现需要决策的技术点，在动手前提出方案，而�
 | 视觉风格 | 暖色柔和风（米白底、暖棕字、圆角卡片、柔和阴影） | 2026-09-19 |
 | 页面结构 | 多页面（4 个独立页面 + 顶部导航） | 2026-09-19 |
 | 内容管理 | Astro 内容集合（Markdown + frontmatter，内容全部在 src/content/，与代码分离） | 2026-09-19 |
+| 版本管理 | git + GitHub 公开仓库 https://github.com/xujie537/self.website （默认分支 main） | 2026-09-19 |
 
 ## 项目结构约定
 - `src/content/` — 所有个人信息（Markdown 文件），用户更新内容只改这里

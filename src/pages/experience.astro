@@ -16,26 +16,30 @@ const experiences = (await getCollection('experience')).sort(
 
   <section class="container timeline">
     {
-      experiences.map((exp) => (
-        <article class="card timeline-item">
-          <div class="timeline-top">
-            <span class="period">{exp.data.period}</span>
-            {exp.data.current && <span class="tag">进行中</span>}
-          </div>
-          <h2 class="timeline-role">{exp.data.role}</h2>
-          <p class="timeline-company">
-            {exp.data.company}
-            {exp.data.location && <span class="muted"> · {exp.data.location}</span>}
-          </p>
-          {
-            exp.data.highlights.length > 0 && (
-              <ul class="timeline-highlights">
-                {exp.data.highlights.map((item) => <li>{item}</li>)}
-              </ul>
-            )
-          }
-        </article>
-      ))
+      experiences.length === 0 ? (
+        <div class="card timeline-empty">经历整理中，敬请期待。</div>
+      ) : (
+        experiences.map((exp) => (
+          <article class="card timeline-item">
+            <div class="timeline-top">
+              <span class="period">{exp.data.period}</span>
+              {exp.data.current && <span class="tag">进行中</span>}
+            </div>
+            <h2 class="timeline-role">{exp.data.role}</h2>
+            <p class="timeline-company">
+              {exp.data.company}
+              {exp.data.location && <span class="muted"> · {exp.data.location}</span>}
+            </p>
+            {
+              exp.data.highlights.length > 0 && (
+                <ul class="timeline-highlights">
+                  {exp.data.highlights.map((item) => <li>{item}</li>)}
+                </ul>
+              )
+            }
+          </article>
+        ))
+      )
     }
   </section>
 </BaseLayout>
@@ -90,5 +94,10 @@ const experiences = (await getCollection('experience')).sort(
 
   .timeline-highlights {
     margin-bottom: 0;
+  }
+
+  .timeline-empty {
+    text-align: center;
+    color: var(--color-muted);
   }
 </style>
