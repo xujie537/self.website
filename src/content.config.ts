@@ -40,7 +40,14 @@ const experience = defineCollection({
     period: z.string(),            // 如 "2023.07 - 至今"，原样显示
     current: z.boolean().default(false),
     location: z.string().optional(),
-    highlights: z.array(z.string()).default([]),
+    summary: z.string().optional(),  // 卡片上的一句话概述
+    highlights: z.array(z.string()).default([]),  // 收起时显示的要点
+    details: z.array(                // 点击展开的分组详情
+      z.object({
+        title: z.string(),           // 分组小标题，如"数据处理与分析"
+        items: z.array(z.string()),  // 分组内的条目
+      }),
+    ).default([]),
     order: z.number().default(0),  // 数字越大排越前
   }),
 });

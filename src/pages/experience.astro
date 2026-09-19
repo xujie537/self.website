@@ -30,11 +30,29 @@ const experiences = (await getCollection('experience')).sort(
               {exp.data.company}
               {exp.data.location && <span class="muted"> · {exp.data.location}</span>}
             </p>
+            {exp.data.summary && <p class="timeline-summary">{exp.data.summary}</p>}
             {
               exp.data.highlights.length > 0 && (
                 <ul class="timeline-highlights">
                   {exp.data.highlights.map((item) => <li>{item}</li>)}
                 </ul>
+              )
+            }
+            {
+              exp.data.details.length > 0 && (
+                <details class="timeline-details">
+                  <summary>查看详细工作内容</summary>
+                  {
+                    exp.data.details.map((group) => (
+                      <div class="detail-group">
+                        <h3>{group.title}</h3>
+                        <ul>
+                          {group.items.map((item) => <li>{item}</li>)}
+                        </ul>
+                      </div>
+                    ))
+                  }
+                </details>
               )
             }
           </article>
@@ -99,5 +117,52 @@ const experiences = (await getCollection('experience')).sort(
   .timeline-empty {
     text-align: center;
     color: var(--color-muted);
+  }
+
+  .timeline-summary {
+    margin-bottom: 12px;
+  }
+
+  /* 点击展开的详情区（原生 details/summary，无需 JS） */
+  .timeline-details {
+    margin-top: 16px;
+    border-top: 1px dashed var(--color-border);
+    padding-top: 12px;
+  }
+
+  .timeline-details summary {
+    cursor: pointer;
+    color: var(--color-accent);
+    font-weight: 500;
+    list-style: none;
+    user-select: none;
+  }
+
+  .timeline-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .timeline-details summary::after {
+    content: "▾";
+    display: inline-block;
+    margin-left: 6px;
+    transition: transform 0.2s;
+  }
+
+  .timeline-details[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  .detail-group {
+    margin-top: 14px;
+  }
+
+  .detail-group h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .detail-group ul {
+    margin-bottom: 0;
   }
 </style>
