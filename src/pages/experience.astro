@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// order 数字越大排越前
+const experiences = (await getCollection('experience')).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+---
+
+<BaseLayout title="经历" description="我的工作与项目经历">
+  <section class="container page-head">
+    <h1>经历</h1>
+    <p class="muted">我的工作与项目经历</p>
+  </section>
+
+  <section class="container timeline">
+    {
+      experiences.map((exp) => (
+        <article class="card timeline-item">
+          <div class="timeline-top">
+            <span class="period">{exp.data.period}</span>
+            {exp.data.current && <span class="tag">进行中</span>}
+          </div>
+          <h2 class="timeline-role">{exp.data.role}</h2>
+          <p class="timeline-company">
+            {exp.data.company}
+            {exp.data.location && <span class="muted"> · {exp.data.location}</span>}
+          </p>
+          {
+            exp.data.highlights.length > 0 && (
+              <ul class="timeline-highlights">
+                {exp.data.highlights.map((item) => <li>{item}</li>)}
+              </ul>
+            )
+          }
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 40px;
+    margin-left: 20px;
+    border-left: 2px solid var(--color-border);
+    padding-left: 20px;
+  }
+
+  .timeline-item {
+    position: relative;
+  }
+
+  /* 左侧时间轴圆点 */
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -27px;
+    top: 38px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-accent-soft);
+  }
+
+  .timeline-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .period {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .timeline-role {
+    margin: 8px 0 4px;
+  }
+
+  .timeline-company {
+    margin-bottom: 12px;
+  }
+
+  .timeline-highlights {
+    margin-bottom: 0;
+  }
+</style>

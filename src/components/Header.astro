@@ -1,0 +1,137 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  siteInfo: CollectionEntry<'site'>['data'];
+  currentPath: string;
+}
+
+const { siteInfo, currentPath } = Astro.props;
+
+// 导航项：新增页面时在这里加一条即可
+const navItems = [
+  { href: '/', label: '关于', match: '/' },
+  { href: '/experience/', label: '经历', match: '/experience/' },
+  { href: '/projects/', label: '项目', match: '/projects/' },
+  { href: '/contact/', label: '联系', match: '/contact/' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">{siteInfo.name}</a>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={['nav-link', { active: currentPath === item.match }]}
+            aria-current={currentPath === item.match ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+    >
+      菜单
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-strong);
+  }
+
+  .site-nav {
+    display: flex;
+    gap: 6px;
+  }
+
+  .nav-link {
+    padding: 6px 14px;
+    border-radius: 999px;
+    color: var(--color-text);
+  }
+
+  .nav-link:hover {
+    background: var(--color-accent-soft);
+    text-decoration: none;
+  }
+
+  .nav-link.active {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 6px 14px;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    .site-nav {
+      display: none;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 24px 16px;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .site-nav.open {
+      display: flex;
+    }
+
+    .nav-toggle {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // 手机端菜单开关
+  const toggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? '关闭' : '菜单';
+  });
+</script>

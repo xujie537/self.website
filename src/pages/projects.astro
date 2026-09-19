@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+// order 数字越大排越前
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.order - a.data.order,
+);
+---
+
+<BaseLayout title="项目" description="我的项目作品集">
+  <section class="container page-head">
+    <h1>项目</h1>
+    <p class="muted">我做过的一些项目</p>
+  </section>
+
+  <section class="container project-grid">
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding-bottom: 40px;
+  }
+</style>

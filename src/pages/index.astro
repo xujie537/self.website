@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const info = await getEntry('site', 'info');
+if (!info) {
+  throw new Error('缺少站点信息文件 src/content/site/info.md');
+}
+const siteInfo = info.data;
+
+const aboutEntry = await getEntry('about', 'about');
+if (!aboutEntry) {
+  throw new Error('缺少关于我文件 src/content/about.md');
+}
+const { Content } = await render(aboutEntry);
+const { skills, education } = aboutEntry.data;
+---
+
+<BaseLayout title="关于我" description={siteInfo.tagline}>
+  <!-- 首屏：姓名 + 一句话介绍 -->
+  <section class="container hero">
+    {
+      siteInfo.avatar ? (
+        <img class="hero-avatar" src={siteInfo.avatar} alt={siteInfo.name} />
+      ) : (
+        <div class="hero-avatar hero-avatar-text">{siteInfo.name.slice(0, 1)}</div>
+      )
+    }
+    <h1 class="hero-name">{siteInfo.name}</h1>
+    <p class="hero-tagline">{siteInfo.tagline}</p>
+    {
+      siteInfo.location && <p class="muted">{siteInfo.location}</p>
+    }
+  </section>
+
+  <!-- 关于我正文（Markdown） -->
+  <section class="container card about-card">
+    <h2>关于我</h2>
+    <div class="prose">
+      <Content />
+    </div>
+  </section>
+
+  <!-- 技能 -->
+  <section class="container section">
+    <h2>技能</h2>
+    <div class="tags">
+      {skills.map((skill) => <span class="tag">{skill}</span>)}
+    </div>
+  </section>
+
+  <!-- 教育背景（有内容才显示） -->
+  {
+    education.length > 0 && (
+      <section class="container section">
+        <h2>教育背景</h2>
+        <ul class="education-list">
+          {education.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+
+  .hero-avatar {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .hero-avatar-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
+
+  .hero-name {
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    margin-bottom: 8px;
+  }
+
+  .hero-tagline {
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .section {
+    margin-top: 40px;
+  }
+
+  .about-card {
+    border-radius: var(--radius-lg);
+  }
+</style>

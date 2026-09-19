@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# astro generated files
+.astro/
+
+# logs
+npm-debug.log*
+
+# environment
+.env
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db

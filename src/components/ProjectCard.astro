@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, link, github } = project.data;
+---
+
+<article class="card project-card">
+  <h2 class="project-title">{title}</h2>
+  <p class="project-desc">{description}</p>
+  {
+    tags.length > 0 && (
+      <div class="tags">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )
+  }
+  <div class="project-links">
+    {link && <a href={link} target="_blank" rel="noopener noreferrer">访问 ↗</a>}
+    {github && <a href={github} target="_blank" rel="noopener noreferrer">GitHub</a>}
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .project-title {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .project-desc {
+    margin: 0;
+    flex: 1;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 16px;
+    font-size: 0.95rem;
+  }
+</style>

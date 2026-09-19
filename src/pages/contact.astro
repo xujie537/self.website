@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const info = await getEntry('site', 'info');
+if (!info) {
+  throw new Error('缺少站点信息文件 src/content/site/info.md');
+}
+const s = info.data;
+---
+
+<BaseLayout title="联系我" description="我的联系方式">
+  <section class="container page-head">
+    <h1>联系我</h1>
+    {s.contactNote && <p class="muted">{s.contactNote}</p>}
+  </section>
+
+  <section class="container contact-grid">
+    <div class="card contact-item">
+      <h2>邮箱</h2>
+      <a href={`mailto:${s.email}`}>{s.email}</a>
+    </div>
+    {
+      s.github && (
+        <div class="card contact-item">
+          <h2>GitHub</h2>
+          <a href={s.github} target="_blank" rel="noopener noreferrer">
+            {s.github.replace('https://', '')}
+          </a>
+        </div>
+      )
+    }
+    {
+      s.linkedin && (
+        <div class="card contact-item">
+          <h2>LinkedIn</h2>
+          <a href={s.linkedin} target="_blank" rel="noopener noreferrer">
+            {s.linkedin.replace('https://', '')}
+          </a>
+        </div>
+      )
+    }
+    {
+      s.phone && (
+        <div class="card contact-item">
+          <h2>电话</h2>
+          <a href={`tel:${s.phone}`}>{s.phone}</a>
+        </div>
+      )
+    }
+    {
+      s.wechat && (
+        <div class="card contact-item">
+          <h2>微信</h2>
+          <p class="contact-plain">{s.wechat}</p>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    padding-bottom: 40px;
+  }
+
+  .contact-item h2 {
+    font-size: 1rem;
+    color: var(--color-muted);
+    margin-bottom: 6px;
+  }
+
+  .contact-plain {
+    margin: 0;
+  }
+</style>
